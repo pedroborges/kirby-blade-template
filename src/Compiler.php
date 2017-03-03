@@ -10,6 +10,7 @@ class Compiler
     protected static $instance = null;
 
     protected $blade;
+    protected $compiler;
 
     public function __construct()
     {
@@ -23,7 +24,10 @@ class Compiler
             $this->kirby->get('option', 'blade.cache', $cache)
         );
 
-        $this->blade->compiler()->setEchoFormat('html(%s)');
+        $this->compiler = $this->blade->compiler();
+
+        $this->setEchoFormat('html(%s)');
+        $this->registerDirectives();
 
         static::$instance = $this;
     }
@@ -39,6 +43,32 @@ class Compiler
         return static::$instance = is_null(static::$instance)
             ? new static
             : static::$instance;
+    }
+
+     /**
+     * Returns the Blade's compiler
+     *
+     * @return \Illuminate\View\Compilers\BladeCompiler
+     */
+    public function compiler()
+    {
+        return $this->compiler;
+    }
+
+     /**
+     * Registers custom directives for Kirby
+     *
+     * @return void
+     */
+    public function registerDirectives()
+    {
+        $this->directive('css', function ($path) {
+            return "<?php echo css($path) ?>";
+        });
+
+        $this->directive('js', function ($path) {
+            return "<?php echo js($path) ?>";
+        });
     }
 
      /**
@@ -64,7 +94,7 @@ class Compiler
      */
     public function __call($method, $params)
     {
-        return call_user_func_array([$this->blade->compiler(), $method], $params);
+        return call_user_func_array([$this->compiler(), $method], $params);
     }
 
 }
