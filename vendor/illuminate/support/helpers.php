@@ -516,14 +516,14 @@ if (! function_exists('dd')) {
     }
 }
 
-if (! function_exists('e')) {
+if (! function_exists('_e')) {
     /**
      * Escape HTML special characters in a string.
      *
      * @param  \Illuminate\Contracts\Support\Htmlable|string  $value
      * @return string
      */
-    function e($value)
+    function _e($value)
     {
         if ($value instanceof Htmlable) {
             return $value->toHtml();
