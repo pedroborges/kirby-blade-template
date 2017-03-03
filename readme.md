@@ -154,7 +154,14 @@ You've seem a couple of Blade's directives in this guide but there's [a lot more
 - `@each`
 - `@stack`
 - `@push`
-- And a few more…
+- [And a few more…](https://laravel.com/docs/master/blade#control-structures)
+
+## Options
+### `blade.views`
+Path to the `.blade.php` views, defaults to `site/templates`.
+
+### `blade.cache`
+Path to views cache, defaults to `site/cache`.
 
 ## Change Log
 All notable changes to this project will be documented at: <https://github.com/pedroborges/kirby-blade-template/blob/master/changelog.md>
