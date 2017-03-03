@@ -19,7 +19,7 @@ class Compiler
         $cache = $this->kirby->roots()->cache();
 
         $this->blade = new Blade(
-            $this->kirby->get('option', 'blade.templates', $templates),
+            $this->kirby->get('option', 'blade.views', $templates),
             $this->kirby->get('option', 'blade.cache', $cache)
         );
 
