@@ -1,0 +1,8 @@
+{
+  "name": "blade",
+  "author": "Pedro Borges <oi@pedroborg.es>",
+  "version": "1.0.0-alpha",
+  "description": "Kirby Blade Template",
+  "type": "kirby-plugin",
+  "license": "MIT"
+}
