@@ -3,7 +3,7 @@
 /**
  * Kirby Blade Template
  *
- * @version   1.0.0-alpha
+ * @version   1.0.0-beta
  * @author    Pedro Borges <oi@pedroborg.es>
  * @copyright Pedro Borges <oi@pedroborg.es>
  * @link      https://github.com/pedroborges/kirby-blade-template
