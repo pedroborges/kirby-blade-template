@@ -95,7 +95,7 @@ When defining a child view, use the Blade `@extends` directive to specify which 
 @endsection
 
 @section('content')
-    $page->text()->kirbytext()
+    {{ $page->text()->kirbytext() }}
 @endsection
 ```
 
@@ -126,7 +126,18 @@ When defining a child view, use the Blade `@extends` directive to specify which 
 
 </p></details>
 
-Notice we didn't use the `html()` method to escape special characters. That's because Blade `{{ }}` statements are automatically sent through Kirby's `html()` helper function to prevent XSS attacks.
+## Displaying Data
+You may display data passed to your Blade views by wrapping the variable in curly braces.
+
+```blade
+{{ $page->title() }}
+```
+
+You don't have use the `html()` method to escape special characters because Blade's `{{ }}` statements are automatically sent through Kirby's `html()` helper function to prevent XSS attacks. The example above is the same as:
+
+```php
+<?php echo html($page->title()) ?>
+```
 
 If you do **not** want your data to be escaped, you may use the following syntax:
 
