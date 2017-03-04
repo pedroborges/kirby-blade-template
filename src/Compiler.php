@@ -2,6 +2,8 @@
 
 namespace PedroBorges\Blade;
 
+use Exception;
+use F;
 use Jenssegers\Blade\Blade;
 use Kirby;
 
@@ -18,6 +20,10 @@ class Compiler
 
         $templates = $this->kirby->roots()->templates();
         $cache = $this->kirby->roots()->cache();
+
+        if (! F::isWritable($cache)) {
+            throw new Exception("Cache directory [{$cache}] does not exist or is not writable.");
+        }
 
         $this->blade = new Blade(
             $this->kirby->get('option', 'blade.views', $templates),
