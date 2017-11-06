@@ -51,12 +51,19 @@ trait CompilesIncludes
     {
         $expression = $this->stripParentheses($expression);
 
-        preg_match('/ *(.*), *(.*)$/is', $expression, $matches);
+        return "<?php echo \$__env->renderWhen($expression, array_except(get_defined_vars(), array('__data', '__path'))); ?>";
+    }
 
-        $when = trim($matches[1]);
+    /**
+     * Compile the include-first statements into valid PHP.
+     *
+     * @param  string  $expression
+     * @return string
+     */
+    protected function compileIncludeFirst($expression)
+    {
+        $expression = $this->stripParentheses($expression);
 
-        $arguments = trim($matches[2]);
-
-        return "<?php if ({$when}) echo \$__env->make({$arguments}, array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>";
+        return "<?php echo \$__env->first({$expression}, array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>";
     }
 }

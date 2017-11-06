@@ -139,6 +139,45 @@ class Factory implements FactoryContract
     }
 
     /**
+     * Get the first view that actually exists from the given list.
+     *
+     * @param  array  $views
+     * @param  array   $data
+     * @param  array   $mergeData
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function first(array $views, $data = [], $mergeData = [])
+    {
+        $view = collect($views)->first(function ($view) {
+            return $this->exists($view);
+        });
+
+        if (! $view) {
+            throw new InvalidArgumentException('None of the views in the given array exist.');
+        }
+
+        return $this->make($view, $data, $mergeData);
+    }
+
+    /**
+     * Get the rendered content of the view based on a given condition.
+     *
+     * @param  bool  $condition
+     * @param  string  $view
+     * @param  array   $data
+     * @param  array   $mergeData
+     * @return string
+     */
+    public function renderWhen($condition, $view, $data = [], $mergeData = [])
+    {
+        if (! $condition) {
+            return '';
+        }
+
+        return $this->make($view, $this->parseData($data), $mergeData)->render();
+    }
+
+    /**
      * Get the rendered contents of a partial from a loop.
      *
      * @param  string  $view
@@ -230,7 +269,7 @@ class Factory implements FactoryContract
      * Get the appropriate view engine for the given path.
      *
      * @param  string  $path
-     * @return \Illuminate\View\Engines\EngineInterface
+     * @return \Illuminate\Contracts\View\Engine
      *
      * @throws \InvalidArgumentException
      */

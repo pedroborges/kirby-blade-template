@@ -29,7 +29,7 @@ trait ManagesLoops
         $this->loopsStack[] = [
             'iteration' => 0,
             'index' => 0,
-            'remaining' => isset($length) ? $length : null,
+            'remaining' => $length ?? null,
             'count' => $length,
             'first' => true,
             'last' => isset($length) ? $length == 1 : null,
@@ -69,7 +69,7 @@ trait ManagesLoops
     /**
      * Get an instance of the last loop in the stack.
      *
-     * @return \StdClass|null
+     * @return \stdClass|null
      */
     public function getLastLoop()
     {
