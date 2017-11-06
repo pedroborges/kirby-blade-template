@@ -94,7 +94,7 @@ class Compiler
      */
     public static function render($view, $data)
     {
-        return self::instance()->blade->make($view, $data);
+        return self::instance()->blade->render($view, $data);
     }
 
 
