@@ -4,6 +4,7 @@ namespace PedroBorges\Blade;
 
 use Exception;
 use F;
+use c;
 use Jenssegers\Blade\Blade;
 use Kirby;
 
@@ -75,6 +76,12 @@ class Compiler
         $this->directive('js', function ($path) {
             return "<?php echo js($path) ?>";
         });
+
+        if ($directives = c::get('blade.directives')){
+            foreach ($directives as $directiveKey => $directive) {
+                $this->directive($directiveKey, $directive);
+            }
+        }        
     }
 
      /**
