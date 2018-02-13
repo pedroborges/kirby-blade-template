@@ -373,8 +373,6 @@ class Finder implements \IteratorAggregate, \Countable
      *
      * This can be slow as all the matching files and directories must be retrieved for comparison.
      *
-     * @param \Closure $closure An anonymous function
-     *
      * @return $this
      *
      * @see SortableIterator
@@ -479,8 +477,6 @@ class Finder implements \IteratorAggregate, \Countable
      *
      * The anonymous function receives a \SplFileInfo and must return false
      * to remove files.
-     *
-     * @param \Closure $closure An anonymous function
      *
      * @return $this
      *
@@ -611,6 +607,20 @@ class Finder implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Check if the any results were found.
+     *
+     * @return bool
+     */
+    public function hasResults()
+    {
+        foreach ($this->getIterator() as $_) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Counts all the results collected by the iterators.
      *
      * @return int
@@ -620,12 +630,7 @@ class Finder implements \IteratorAggregate, \Countable
         return iterator_count($this->getIterator());
     }
 
-    /**
-     * @param $dir
-     *
-     * @return \Iterator
-     */
-    private function searchInDirectory($dir)
+    private function searchInDirectory(string $dir): \Iterator
     {
         if (static::IGNORE_VCS_FILES === (static::IGNORE_VCS_FILES & $this->ignore)) {
             $this->exclude = array_merge($this->exclude, self::$vcsPatterns);
