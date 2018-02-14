@@ -95,7 +95,5 @@ class Template extends BaseTemplate
         Tpl::$data = $tplData;
 
         return $result;
-
     }
-
 }
