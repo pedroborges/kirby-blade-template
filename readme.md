@@ -156,7 +156,7 @@ All directives registered with this option will be available in your Blade views
 
 ### Requirements
 - Kirby 2.3.2+
-- PHP 5.6.4+
+- PHP 7.1.3+
 
 ### Download
 [Download the files](https://github.com/pedroborges/kirby-blade-template/archive/master.zip) and place them inside `site/plugins/blade`.

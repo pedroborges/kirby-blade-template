@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 - `blade.directives` option (@obelmont)
 
 ### Changed
-- Upgraded to Blade v5.6
+- Upgraded to Blade v5.6 (requires PHP 7.1.3)
 
 ### Fix
 - Compiler `render` method
