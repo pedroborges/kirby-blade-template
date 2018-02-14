@@ -149,7 +149,7 @@ c::set('blade.directives', [
 All directives registered with this option will be available in your Blade views:
 
 ```
-@kirbytext('This is Kirby's special flavor of **markdown**.')
+@kirbytext("This is Kirby's special flavor of **markdown**.")
 ```
 
 ## Installation
