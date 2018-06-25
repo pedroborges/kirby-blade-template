@@ -1,5 +1,18 @@
 {
+  "name": "pedroborges/kirby-component-blade",
+  "description": "Laravel Blade template engine for Kirby 3.",
+  "version": "2.0.0-alpha-1",
+  "keywords": ["kirby-component-template"],
+  "authors": [
+    {
+      "name": "Pedro Borges",
+      "email": "oi@pedroborg.es"
+    }
+  ],
   "autoload": {
+    "files": [
+      "config.php"
+    ],
     "psr-4": {
       "PedroBorges\\Blade\\": "src/"
     }

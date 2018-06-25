@@ -3,97 +3,69 @@
 namespace PedroBorges\Blade;
 
 use Exception;
-use Kirby\Component\Template as BaseTemplate;
-use Page;
-use Tpl;
+use Kirby\Cms\App;
+use Kirby\Toolkit\F;
 
-class Template extends BaseTemplate
+class Template extends \Kirby\Cms\Template
 {
-    protected $extension = '.blade.php';
+    protected $blade;
 
-    /**
-     * Returns a template file path by name
-     *
-     * @param   string  $name
-     * @return  string
-     */
-    public function file($name)
+    public function __construct(string $name, array $data = [], string $contentType = null)
     {
-        $base = $this->kirby->roots()->templates() . DS . str_replace('/', DS, $name);
-        $blade = $this->extension;
+        parent::__construct($name, $data, $contentType);
 
-        if (file_exists($base . $blade)) {
-            return $base . $blade;
-        } else {
-            return $base . '.php';
+        // TODO: add more view paths (site/template, resources/view)
+        $viewPath    = dirname($this->file());
+        $this->blade = new Blade($viewPath);
+    }
+
+    public function blade()
+    {
+        return $this->blade;
+    }
+
+    public function extension(): string
+    {
+        return 'blade.php';
+    }
+
+    public function isBlade(): bool
+    {
+        $length = strlen($this->extension());
+
+        return substr($this->file(), -$length) === $this->extension();
+    }
+
+    public function file()
+    {
+        $viewPath  = $this->root() . '/' . $this->name();
+        $bladeView = $viewPath . '.' . $this->extension();
+
+        try {
+            try {
+                return F::realpath($bladeView, $this->root());
+            } catch (Exception $e) {
+                // try to load the PHP template
+                return F::realpath($viewPath . '.php', $this->root());
+            }
+        } catch (Exception $e) {
+            // try to load the template from the registry
+            // TODO: test if it is a blade view
+            return App::instance()->extension(static::$type . 's', $this->name());
         }
     }
 
     /**
-     * Returns the template name
+     * Renders the view
      *
-     * @param   string  $file
-     * @return  string
+     * @return string
      */
-    public function getTemplateName($file)
+    public function render(): string
     {
-        $length = strlen($this->extension);
-
-        return substr($file, strrpos($file, '/') + 1, -$length);
-    }
-
-    /**
-     * Checks if file extension is .blade.php
-     *
-     * @param   string  $file
-     * @return  boolean
-     */
-    public function isBlade($file)
-    {
-        $length = strlen($this->extension);
-
-        return substr($file, -$length) === $this->extension;
-    }
-
-    /**
-     * Renders the template by page with the additional data
-     *
-     * @param   Page|string  $template
-     * @param   array        $data
-     * @param   boolean      $return
-     * @return  string
-     */
-    public function render($template, $data = [], $return = true)
-    {
-        if ($template instanceof Page) {
-            $page = $template;
-            $file = $page->templateFile();
-            $data = $this->data($page, $data);
-        } else {
-            $file = $template;
-            $data = $this->data(null, $data);
+        if ($this->isBlade()) {
+            return $this->blade()->render($this->name(), $this->data());
         }
 
-        // check for an existing template
-        if (! file_exists($file)) {
-            throw new Exception('The template could not be found');
-        }
-
-        // merge and register the template data globally
-        $tplData = Tpl::$data;
-        Tpl::$data = array_merge(Tpl::$data, $data);
-
-        // load the template
-        if ($this->isBlade($file)) {
-            $view = $this->getTemplateName($file);
-            $result = Compiler::render($view, Tpl::$data);
-        } else {
-            $result = Tpl::load($file, null, $return);
-        }
-
-        // reset the template data
-        Tpl::$data = $tplData;
-
-        return $result;
+        return parent::render();
     }
 }
