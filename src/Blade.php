@@ -2,8 +2,10 @@
 
 namespace PedroBorges\Blade;
 
-use Jenssegers\Blade\Blade as BladeEngine;
+use Exception;
 use Illuminate\View\Compilers\BladeCompiler;
+use Jenssegers\Blade\Blade as BladeEngine;
+use Kirby\Toolkit\Dir;
 
 class Blade
 {
@@ -18,9 +20,17 @@ class Blade
      */
     public function __construct($viewPath)
     {
+        $cachePath = kirby()->roots()->cache() . '/blade';
+
+        try {
+            Dir::make($cachePath);
+        } catch (Exception $e) {
+            throw new Exception("Cache directory [{$cache}] does not exist or is not writable.");
+        }
+
         $this->engine = new BladeEngine(
             $viewPath,
-            kirby()->roots()->cache()
+            $cachePath
         );
 
         $this->compiler = $this->engine->compiler();
