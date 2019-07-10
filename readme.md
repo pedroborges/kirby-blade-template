@@ -1,200 +1,63 @@
-# Kirby Blade Templates [![Release](https://img.shields.io/github/release/pedroborges/kirby-blade-template.svg)](https://github.com/pedroborges/kirby-blade-template/releases) [![Issues](https://img.shields.io/github/issues/pedroborges/kirby-blade-template.svg)](https://github.com/pedroborges/kirby-blade-template/issues)
+# Kirby Pluginkit: Example plugin for Kirby
 
-[Laravel Blade](https://laravel.com/docs/master/blade) template component for Kirby CMS.
+> Variant "Setup with Composer dependencies"
 
-> Blade is the simple, yet powerful templating engine provided by Laravel. Unlike other popular PHP templating engines, Blade does not restrict you from using plain PHP code in your views. In fact, all Blade views are compiled into plain PHP code and cached until they are modified, meaning Blade adds essentially zero overhead to your site.
+This is a boilerplate for a Kirby plugin that can be installed via all three [supported installation methods](https://getkirby.com/docs/guide/plugins/plugin-setup-basic#the-three-plugin-installation-methods).
 
-Blade view files use the `.blade.php` file extension and are typically stored in the `site/templates` directory.
+You can find a list of Pluginkit variants on the [`master` branch](https://github.com/getkirby/pluginkit/tree/master).
 
-**This component extends Kirby's built-in templating engine. Any regular `.php` template will continue to works as usual.**
+****
 
-## Basic Usage
-Blade Templates works out of the box without requiring any configuration. You just need to add `.blade.php` files to `site/templates`.
+## How to use the Pluginkit
 
-### Defining a Layout
-Blade uses the concept of [template inheritance](https://laravel.com/docs/master/blade#template-inheritance) and sections. You can define master layouts which are extended by child views. Check out how a master layout would look like in Kirby:
+1. Fork this repository
+2. Change the plugin name and description in the `composer.json`
+3. Change the plugin name in the `index.php`
+4. Change the license if you don't want to publish under MIT
+5. Add your plugin code to the `index.php` and the `src` directory
+6. Require Composer dependencies with `composer require`
+7. Update this `README` with instructions for your plugin
 
-```blade
-<!-- Stored in site/templates/layouts/master.blade.php -->
+We have a tutorial on how to build your own plugin based on the Pluginkit [in the Kirby documentation](https://getkirby.com/docs/guide/plugins/plugin-setup-composer).
 
-<html>
-    <head>
-        <title>@yield('title') | {{ $site->title() }}</title>
-    </head>
-    <body>
-        <h1>@yield('title')</h1>
+What follows is an example README for your plugin.
 
-        <div class="sidebar">
-            @section('sidebar')
-            <h2>Description:</h2>
-            @show
-        </div>
-
-        <div class="container">
-            @yield('content')
-        </div>
-    </body>
-</html>
-```
-
-As you can see, this file contains typical HTML markup. However, take note of the `@section` and `@yield` directives. The  `@section` directive, as the name implies, defines a section of content, while the `@yield` directive is used to display the contents of a given section.
-
-### Extending a Layout
-When defining a child view, use the Blade `@extends` directive to specify which layout the child view should "inherit". Views which extend a Blade layout may inject content into the layout's sections using `@section` directives. Remember, as seen in the example above, the contents of these sections will be displayed in the layout using `@yield`:
-
-```blade
-<!-- Stored in site/templates/default.blade.php -->
-
-@extends('layouts.master')
-
-@section('title', $page->title())
-
-@section('sidebar')
-    @parent
-
-    {{ $page->description()->kirbytext() }}
-@endsection
-
-@section('content')
-    {{ $page->text()->kirbytext() }}
-@endsection
-```
-
-<details>
-    <summary><strong>Show rendered HTML</strong> 👁</summary><p>
-
-```html
-<html>
-    <head>
-        <title>Services | Company Name</title>
-    </head>
-    <body>
-        <h1>Services</h1>
-
-        <div class="sidebar">
-            <h2>Description:</h2>
-            <p>Service description</p>
-        </div>
-
-        <div class="container">
-            <p>Sum inusa commolu ptatent mossend elignam volenim quiam quiaspe riaessenis plisita ecaboribus.</p>
-
-            <p>Ecaborenis molupta spiene recepudam, quostium reprem rereprat.</p>
-        </div>
-    </body>
-</html>
-```
-
-</p></details>
-
-## Displaying Data
-You may display data passed to your Blade views by wrapping the variable in curly braces.
-
-```blade
-{{ $page->title() }}
-```
-
-You don't have use the `html()` method to escape special characters because Blade's `{{ }}` statements are automatically sent through Kirby's `html()` helper function to prevent XSS attacks. The example above is the same as:
-
-```php
-<?php echo html($page->title()) ?>
-```
-
-If you do **not** want your data to be escaped, you may use the following syntax:
-
-```blade
-{!! snippet('posts', $posts, true) !!}
-```
-
-> While this example shows how you can use a regular snippet with Blade, take note that Blade's `@include` [directive](https://laravel.com/docs/master/blade#including-sub-views) allows you to include a Blade view from within another view. All variables that are available to the parent view will be made available to the included view as well.
-
-### Directives
-You've seem a couple of Blade's directives in this guide but there's [a lot more](https://laravel.com/docs/master/blade#control-structures) available to you:
-
-- `@if`
-- `@else`
-- `@elseif`
-- `@unless`
-- `@for`
-- `@foreach`
-- `@forelse`
-- `@empty`
-- `@while`
-- `@php`
-- `@include`
-- `@includeIf`
-- `@each`
-- `@stack`
-- `@push`
-- [And a few more…](https://laravel.com/docs/master/blade#control-structures)
-
-## Options
-### `blade.views`
-Path to the `.blade.php` views, defaults to `site/templates`.
-
-### `blade.cache`
-Path to views cache, defaults to `site/cache`.
-
-### `blade.directives`
-[Extends Blade](https://laravel.com/docs/master/blade#extending-blade) with custom directives.
-
-```php
-c::set('blade.directives', [
-    'kirbytext' => function ($text) {
-        return "<?php echo kirbytext($text) ?>";
-    }
-]);
-```
-
-All directives registered with this option will be available in your Blade views:
-
-```
-@kirbytext("This is Kirby's special flavor of **markdown**.")
-```
+****
 
 ## Installation
 
-### Requirements
-- Kirby 2.3.2+
-- PHP 7.1.3+
-
 ### Download
-[Download the files](https://github.com/pedroborges/kirby-blade-template/archive/master.zip) and place them inside `site/plugins/blade`.
 
-### Kirby CLI
-Kirby's [command line interface](https://github.com/getkirby/cli) is the easiest way to install Blade Templates:
+Download and copy this repository to `/site/plugins/{{ plugin-name }}`.
 
-    $ kirby plugin:install pedroborges/kirby-blade-template
+### Git submodule
 
-To update it simply run:
+```
+git submodule add https://github.com/{{ your-name }}/{{ plugin-name }}.git site/plugins/{{ plugin-name }}
+```
 
-    $ kirby plugin:update pedroborges/kirby-blade-template
+### Composer
 
-### Git Submodule
-You can add Blade Templates as a Git submodule.
+```
+composer require {{ your-name }}/{{ plugin-name }}
+```
 
-<details>
-    <summary><strong>Show Git Submodule instructions</strong> 👁</summary><p>
+## Setup
 
-    $ cd your/project/root
-    $ git submodule add https://github.com/pedroborges/kirby-blade-template.git site/plugins/blade
-    $ git submodule update --init --recursive
-    $ git commit -am "Add Blade Templates component"
+*Additional instructions on how to configure the plugin (e.g. blueprint setup, config options, etc.)*
 
-Updating is as easy as running a few commands.
+## Options
 
-    $ cd your/project/root
-    $ git submodule foreach git checkout master
-    $ git submodule foreach git pull
-    $ git commit -am "Update submodules"
-    $ git submodule update --init --recursive
+*Document the options and APIs that this plugin offers*
 
-</p></details>
+## Development
 
-## Change Log
-All notable changes to this project will be documented at: <https://github.com/pedroborges/kirby-blade-template/blob/master/changelog.md>
+*Add instructions on how to help working on the plugin (e.g. npm setup, Composer dev dependencies, etc.)*
 
 ## License
-Blade Template component is open-sourced software licensed under the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
-Copyright © 2018 Pedro Borges <oi@pedroborg.es>
+MIT
+
+## Credits
+
+- [Your Name](https://github.com/ghost)

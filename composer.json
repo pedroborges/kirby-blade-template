@@ -1,23 +1,33 @@
 {
-  "name": "pedroborges/kirby-component-blade",
-  "description": "Laravel Blade template engine for Kirby 3.",
-  "version": "2.0.0-alpha-1",
-  "keywords": ["kirby-component-template"],
-  "authors": [
-    {
-      "name": "Pedro Borges",
-      "email": "oi@pedroborg.es"
-    }
-  ],
-  "autoload": {
-    "files": [
-      "config.php"
+    "name": "pedroborges/kirby-blade-template",
+    "description": "Kirby Blade Template",
+    "keywords": ["kirby-plugin", "blade", "template"],
+    "license": "MIT",
+    "homepage": "https://github.com/pedroborges/kirby-blade-template",
+    "type": "kirby-plugin",
+    "authors": [
+        {
+            "name": "Pedro Borges",
+            "email": "oi@pedroborg.es"
+        }
     ],
-    "psr-4": {
-      "PedroBorges\\Blade\\": "src/"
+    "require": {
+        "php": ">=7.1.0",
+        "getkirby/composer-installer": "^1.1",
+        "jenssegers/blade": "^1.1"
+    },
+    "autoload": {
+        "files": [
+            "helpers.php"
+        ],
+        "psr-4": {
+            "PedroBorges\\Blade\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "extra": {
+        "installer-name": "blade-template"
     }
-  },
-  "require": {
-    "jenssegers/blade": "^1.1"
-  }
 }

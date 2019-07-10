@@ -27,15 +27,15 @@ abstract class AbstractFileExtractor
      */
     protected function extractFiles($resource)
     {
-        if (is_array($resource) || $resource instanceof \Traversable) {
-            $files = array();
+        if (\is_array($resource) || $resource instanceof \Traversable) {
+            $files = [];
             foreach ($resource as $file) {
                 if ($this->canBeExtracted($file)) {
                     $files[] = $this->toSplFileInfo($file);
                 }
             }
         } elseif (is_file($resource)) {
-            $files = $this->canBeExtracted($resource) ? array($this->toSplFileInfo($resource)) : array();
+            $files = $this->canBeExtracted($resource) ? [$this->toSplFileInfo($resource)] : [];
         } else {
             $files = $this->extractFromDirectory($resource);
         }

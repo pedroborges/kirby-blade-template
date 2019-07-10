@@ -8,5 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
     '72579e7bd17821bb1321b87411366eae' => $vendorDir . '/illuminate/support/helpers.php',
-    '4243ab37548b995f75c0c666f4dce42c' => $baseDir . '/config.php',
+    '0ef16a12598996a6838a37a2111b4e45' => $baseDir . '/helpers.php',
 );

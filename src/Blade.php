@@ -2,65 +2,27 @@
 
 namespace PedroBorges\Blade;
 
-use Exception;
-use Illuminate\View\Compilers\BladeCompiler;
-use Jenssegers\Blade\Blade as BladeEngine;
-use Kirby\Toolkit\Dir;
+use Jenssegers\Blade\Blade as BaseBlade;
+use PedroBorges\Blade\View\ViewServiceProvider;
+use Illuminate\Container\Container;
 
-class Blade
+class Blade extends BaseBlade
 {
-    protected $engine;
-    protected $compiler;
-
     /**
-     * Creates a new view object
+     * Constructor.
      *
-     * @param string $file
-     * @param array  $data
+     * @param string|array       $viewPaths
+     * @param string             $cachePath
+     * @param ContainerInterface $container
      */
-    public function __construct($viewPath)
+    public function __construct($viewPaths, $cachePath, ContainerInterface $container = null)
     {
-        $cachePath = kirby()->roots()->cache() . '/blade';
+        $this->viewPaths = $viewPaths;
+        $this->cachePath = $cachePath;
+        $this->container = $container ?: new Container;
+        $this->setupContainer();
 
-        try {
-            Dir::make($cachePath);
-        } catch (Exception $e) {
-            throw new Exception("Cache directory [{$cache}] does not exist or is not writable.");
-        }
-
-        $this->engine = new BladeEngine(
-            $viewPath,
-            $cachePath
-        );
-
-        $this->compiler = $this->engine->compiler();
-        $this->compiler->setEchoFormat('html(%s)');
-    }
-
-    /**
-     * Retrieves Blade object
-     */
-    public function engine(): BladeEngine
-    {
-        return $this->engine;
-    }
-
-    /**
-     * Retrieves BladeCompiler object
-     */
-    public function compiler(): BladeCompiler
-    {
-        return $this->compiler;
-    }
-
-    /**
-     * Renders Blade views
-     *
-     * @param string $file
-     * @param array  $data
-     */
-    public function render(string $view, array $data = []): string
-    {
-        return $this->engine()->render($view, $data);
+        (new ViewServiceProvider($this->container))->register();
+        $this->engineResolver = $this->container->make('view.engine.resolver');
     }
 }
