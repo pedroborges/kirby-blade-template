@@ -2,6 +2,7 @@
 
 namespace PedroBorges\Blade\View\Concerns;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\View\Concerns\ManagesLayouts as BaseLayouts;
 
 trait ManagesLayouts
@@ -47,7 +48,9 @@ trait ManagesLayouts
         $sectionContent = str_replace('@@parent', '--parent--holder--', $sectionContent);
 
         return str_replace(
-            '--parent--holder--', '@parent', str_replace(static::parentPlaceholder($section), '', $sectionContent)
+            '--parent--holder--',
+            '@parent',
+            str_replace(static::parentPlaceholder($section), '', $sectionContent)
         );
     }
 }

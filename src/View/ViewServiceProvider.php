@@ -14,7 +14,7 @@ class ViewServiceProvider extends BaseViewServiceProvider
      * @param  \Illuminate\View\Engines\EngineResolver  $resolver
      * @param  \Illuminate\View\ViewFinderInterface  $finder
      * @param  \Illuminate\Contracts\Events\Dispatcher  $events
-     * @return \Illuminate\View\Factory
+     * @return Factory
      */
     protected function createFactory($resolver, $finder, $events)
     {
@@ -34,7 +34,8 @@ class ViewServiceProvider extends BaseViewServiceProvider
         // instance to pass into the engine so it can compile the views properly.
         $this->app->singleton('blade.compiler', function () {
             return new BladeCompiler(
-                $this->app['files'], $this->app['config']['view.compiled']
+                $this->app['files'],
+                $this->app['config']['view.compiled']
             );
         });
 

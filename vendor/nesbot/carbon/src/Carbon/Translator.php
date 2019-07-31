@@ -202,8 +202,10 @@ class Translator extends Translation\Translator
     public function getLocalesFiles($prefix = '')
     {
         $files = [];
+
         foreach ($this->getDirectories() as $directory) {
             $directory = rtrim($directory, '\\/');
+
             foreach (glob("$directory/$prefix*.php") as $file) {
                 $files[] = $file;
             }
@@ -316,20 +318,23 @@ class Translator extends Translation\Translator
         }
 
         if ($locale === 'auto') {
-            $completeLocale = setlocale(LC_TIME, 0);
+            $completeLocale = setlocale(LC_TIME, '0');
             $locale = preg_replace('/^([^_.-]+).*$/', '$1', $completeLocale);
             $locales = $this->getAvailableLocales($locale);
 
             $completeLocaleChunks = preg_split('/[_.-]+/', $completeLocale);
+
             $getScore = function ($language) use ($completeLocaleChunks) {
                 $chunks = preg_split('/[_.-]+/', $language);
                 $score = 0;
+
                 foreach ($completeLocaleChunks as $index => $chunk) {
                     if (!isset($chunks[$index])) {
                         $score++;
 
                         continue;
                     }
+
                     if (strtolower($chunks[$index]) === strtolower($chunk)) {
                         $score += 10;
                     }
@@ -337,16 +342,18 @@ class Translator extends Translation\Translator
 
                 return $score;
             };
-            usort($locales, function ($a, $b) use ($getScore) {
-                $a = $getScore($a);
-                $b = $getScore($b);
 
-                if ($a === $b) {
+            usort($locales, function ($first, $second) use ($getScore) {
+                $first = $getScore($first);
+                $second = $getScore($second);
+
+                if ($first === $second) {
                     return 0;
                 }
 
-                return $a < $b ? 1 : -1;
+                return $first < $second ? 1 : -1;
             });
+
             $locale = $locales[0];
         }
 
